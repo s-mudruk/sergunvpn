@@ -175,16 +175,15 @@
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <div class="step-text">Откройте приложение, нажмите <strong>+</strong> и выберите <strong>«Добавить из буфера»</strong></div>
+          <div class="step-text">Нажмите кнопку ниже — ключ скопируется в буфер</div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <div class="step-text">Нажмите кнопку ниже — ключ скопируется. Вернитесь в Streisand и вставьте</div>
+          <div class="step-text">Откройте Streisand, нажмите <strong>+</strong> → <strong>«Добавить из буфера»</strong></div>
         </div>
       </div>
 
-      <a id="deeplink-ios" href="#" class="btn btn-primary">Открыть в Streisand →</a>
-      <button class="btn btn-secondary" onclick="copyKey(this)">Скопировать ключ</button>
+      <button class="btn btn-primary" onclick="copyKey(this)">Скопировать ключ</button>
     </div>
 
     <!-- Android -->
@@ -196,16 +195,15 @@
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <div class="step-text">Нажмите кнопку ниже — Hiddify откроется и автоматически добавит конфиг</div>
+          <div class="step-text">Нажмите кнопку ниже — ключ скопируется в буфер</div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <div class="step-text">Нажмите <strong>Подключиться</strong> в приложении</div>
+          <div class="step-text">Откройте Hiddify, нажмите <strong>+</strong> → <strong>«Добавить из буфера»</strong></div>
         </div>
       </div>
 
-      <a id="deeplink-android" href="#" class="btn btn-primary">Открыть в Hiddify →</a>
-      <button class="btn btn-secondary" onclick="copyKey(this)">Скопировать ключ</button>
+      <button class="btn btn-primary" onclick="copyKey(this)">Скопировать ключ</button>
     </div>
   </div>
 
@@ -225,8 +223,6 @@
   } else {
     document.getElementById('main').classList.remove('hidden')
 
-    document.getElementById('deeplink-ios').href = key
-    document.getElementById('deeplink-android').href = 'hiddify://import/' + key
   }
 
   function switchTab(tab) {
