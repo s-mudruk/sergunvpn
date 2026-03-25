@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SergunVPN — Подключение</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 20px;
+      padding: 40px 32px;
+      max-width: 420px;
+      width: 100%;
+    }
+
+    .logo {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      background: transparent;
+      color: #666;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .steps { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #2a2a2a;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-text { font-size: 14px; color: #ccc; line-height: 1.5; }
+    .step-text a { color: #fff; text-decoration: underline; }
+    .step-text strong { color: #fff; }
+
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover { opacity: 0.85; }
+
+    .btn-primary {
+      background: #fff;
+      color: #000;
+      margin-bottom: 12px;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #ccc;
+      border: 1px solid #2a2a2a;
+      font-size: 15px;
+    }
+
+    .hidden { display: none; }
+
+    .error {
+      text-align: center;
+      padding: 40px 0;
+    }
+    .error-icon { font-size: 40px; margin-bottom: 16px; }
+    .error h2 { font-size: 18px; margin-bottom: 8px; }
+    .error p { font-size: 14px; color: #666; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">SergunVPN</div>
+
+  <div id="main" class="hidden">
+    <h1>Ключ готов</h1>
+    <p class="subtitle">Выберите устройство и следуйте инструкции</p>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('ios')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        iPhone
+      </button>
+      <button class="tab" onclick="switchTab('android')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0 0 12 1.5c-.96 0-1.86.23-2.66.63L7.85.65c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.983 5.983 0 0 0 6 7h12a5.983 5.983 0 0 0-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
+        Android
+      </button>
+    </div>
+
+    <!-- iOS -->
+    <div id="tab-ios">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Скачайте <a href="https://apps.apple.com/app/streisand/id6450534064" target="_blank"><strong>Streisand</strong></a> из App Store</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Откройте приложение, нажмите <strong>+</strong> и выберите <strong>«Добавить из буфера»</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Нажмите кнопку ниже — ключ скопируется. Вернитесь в Streisand и вставьте</div>
+        </div>
+      </div>
+
+      <a id="deeplink-ios" href="#" class="btn btn-primary">Открыть в Streisand →</a>
+      <button class="btn btn-secondary" onclick="copyKey(this)">Скопировать ключ</button>
+    </div>
+
+    <!-- Android -->
+    <div id="tab-android" class="hidden">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Скачайте <a href="https://play.google.com/store/apps/details?id=app.hiddify.com" target="_blank"><strong>Hiddify</strong></a> из Google Play</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Нажмите кнопку ниже — Hiddify откроется и автоматически добавит конфиг</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Нажмите <strong>Подключиться</strong> в приложении</div>
+        </div>
+      </div>
+
+      <a id="deeplink-android" href="#" class="btn btn-primary">Открыть в Hiddify →</a>
+      <button class="btn btn-secondary" onclick="copyKey(this)">Скопировать ключ</button>
+    </div>
+  </div>
+
+  <div id="error" class="hidden error">
+    <div class="error-icon">🔑</div>
+    <h2>Ключ не найден</h2>
+    <p>Используйте ссылку, которую прислал Сергей</p>
+  </div>
+</div>
+
+<script>
+  const hash = window.location.hash.slice(1)
+  const key = decodeURIComponent(hash)
+
+  if (!key || !key.startsWith('vless://')) {
+    document.getElementById('error').classList.remove('hidden')
+  } else {
+    document.getElementById('main').classList.remove('hidden')
+
+    document.getElementById('deeplink-ios').href = key
+    document.getElementById('deeplink-android').href = 'hiddify://import/' + key
+  }
+
+  function switchTab(tab) {
+    document.getElementById('tab-ios').classList.toggle('hidden', tab !== 'ios')
+    document.getElementById('tab-android').classList.toggle('hidden', tab !== 'android')
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      t.classList.toggle('active', (i === 0 && tab === 'ios') || (i === 1 && tab === 'android'))
+    })
+  }
+
+  function copyKey(btn) {
+    navigator.clipboard.writeText(key).then(() => {
+      const orig = btn.textContent
+      btn.textContent = 'Скопировано ✓'
+      setTimeout(() => btn.textContent = orig, 2000)
+    })
+  }
+</script>
+</body>
+</html>
