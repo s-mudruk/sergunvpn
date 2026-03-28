@@ -27,7 +27,7 @@
     #screen-loading {
       width: 100%;
       max-width: 390px;
-      transition: opacity 0.35s ease;
+      transition: opacity 0.3s ease;
     }
 
     .loading-row {
@@ -49,7 +49,7 @@
       max-width: 390px;
       opacity: 0;
       display: none;
-      transition: opacity 0.35s ease;
+      transition: opacity 0.3s ease;
     }
 
     .card {
@@ -113,7 +113,7 @@
       color: #5e5e5e;
       background: transparent;
       line-height: normal;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
     }
 
     .tab.active {
@@ -127,17 +127,32 @@
       height: 18px;
       flex-shrink: 0;
       fill: #5e5e5e;
-      transition: fill 0.2s;
+      transition: fill 0.25s ease;
     }
 
     .tab.active svg { fill: #131313; }
 
-    /* Steps */
+    /* Steps — crossfade wrapper */
+    .steps-wrapper {
+      position: relative;
+      min-height: 128px;
+      margin-bottom: 24px;
+    }
+
     .steps {
+      position: absolute;
+      top: 0; left: 0; right: 0;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-bottom: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .steps.steps-active {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .step {
@@ -190,9 +205,11 @@
       font-family: 'Space Mono', monospace;
       cursor: pointer;
       line-height: normal;
-      transition: background 0.2s, color 0.2s;
+      /* only transition going back to white (revert) */
+      transition: background 0.25s ease, color 0.25s ease;
     }
 
+    /* copied: applied instantly via js, no transition in */
     .btn-copy.copied {
       background: #7e7e7e;
       color: #5e5e5e;
@@ -203,8 +220,6 @@
       width: 22px;
       height: 22px;
       flex-shrink: 0;
-      stroke: #5e5e5e;
-      fill: none;
     }
 
     /* Error */
@@ -237,7 +252,7 @@
     <div id="main-content" class="hidden">
       <div class="logo"><span class="name">Sergun/</span><span class="dim">VPN</span></div>
       <h1>Hello, world?</h1>
-      <p class="subtitle"># Выберите устройство и следуйте инструкции</p>
+      <p class="subtitle"># Выберите ОС и следуйте инструкции</p>
 
       <div class="tabs">
         <button class="tab active" onclick="switchTab('ios')" id="tab-ios">
@@ -254,35 +269,37 @@
         </button>
       </div>
 
-      <!-- iOS steps -->
-      <div id="steps-ios" class="steps">
-        <div class="step">
-          <div class="badge">1</div>
-          <p class="step-text">Скачайте <a href="https://apps.apple.com/app/happ-proxy-utility/id6504287215" target="_blank">Happ</a> из App Store</p>
+      <div class="steps-wrapper">
+        <!-- iOS steps -->
+        <div id="steps-ios" class="steps steps-active">
+          <div class="step">
+            <div class="badge">1</div>
+            <p class="step-text">Скачайте <a href="https://apps.apple.com/app/happ-proxy-utility/id6504287215" target="_blank">Happ</a> из App Store</p>
+          </div>
+          <div class="step">
+            <div class="badge">2</div>
+            <p class="step-text">Нажмите кнопку ниже — ключ скопируется в буфер обмена</p>
+          </div>
+          <div class="step">
+            <div class="badge">3</div>
+            <p class="step-text">Откройте <a href="https://apps.apple.com/app/happ-proxy-utility/id6504287215" target="_blank">Happ</a>, нажмите на «Добавить из буфера»</p>
+          </div>
         </div>
-        <div class="step">
-          <div class="badge">2</div>
-          <p class="step-text">Нажмите кнопку ниже — ключ скопируется в буфер обмена</p>
-        </div>
-        <div class="step">
-          <div class="badge">3</div>
-          <p class="step-text">Откройте <a href="https://apps.apple.com/app/happ-proxy-utility/id6504287215" target="_blank">Happ</a>, нажмите на «Добавить из буфера»</p>
-        </div>
-      </div>
 
-      <!-- Android steps -->
-      <div id="steps-android" class="steps hidden">
-        <div class="step">
-          <div class="badge">1</div>
-          <p class="step-text">Скачайте <a href="https://play.google.com/store/apps/details?id=is.happ.app" target="_blank">Happ</a> из Google Play</p>
-        </div>
-        <div class="step">
-          <div class="badge">2</div>
-          <p class="step-text">Нажмите кнопку ниже — ключ скопируется в буфер обмена</p>
-        </div>
-        <div class="step">
-          <div class="badge">3</div>
-          <p class="step-text">Откройте <a href="https://play.google.com/store/apps/details?id=is.happ.app" target="_blank">Happ</a>, нажмите на «Добавить из буфера»</p>
+        <!-- Android steps -->
+        <div id="steps-android" class="steps">
+          <div class="step">
+            <div class="badge">1</div>
+            <p class="step-text">Скачайте <a href="https://play.google.com/store/apps/details?id=com.happproxy" target="_blank">Happ</a> из Google Play</p>
+          </div>
+          <div class="step">
+            <div class="badge">2</div>
+            <p class="step-text">Нажмите кнопку ниже — ключ скопируется в буфер обмена</p>
+          </div>
+          <div class="step">
+            <div class="badge">3</div>
+            <p class="step-text">Откройте <a href="https://play.google.com/store/apps/details?id=com.happproxy" target="_blank">Happ</a>, нажмите на «Добавить из буфера»</p>
+          </div>
         </div>
       </div>
 
@@ -302,7 +319,7 @@
 <script>
   // ── Loading animation ──────────────────────────
   const MAX_BARS = 14
-  const DURATION = 1800 // ms
+  const DURATION = 900 // ms — ~1 sec animation
   const barLeft  = document.getElementById('bar-left')
   const barRight = document.getElementById('bar-right')
   let   start    = null
@@ -317,7 +334,7 @@
     if (t < 1) {
       requestAnimationFrame(animateLoading)
     } else {
-      setTimeout(showMain, 200)
+      setTimeout(showMain, 150)
     }
   }
 
@@ -331,11 +348,10 @@
     setTimeout(() => {
       loading.style.display = 'none'
       main.style.display = 'block'
-      // double rAF to ensure display:block is painted before opacity transition
       requestAnimationFrame(() => requestAnimationFrame(() => {
         main.style.opacity = '1'
       }))
-    }, 350)
+    }, 300)
 
     const key = decodeURIComponent(window.location.hash.slice(1))
     if (key.startsWith('vless://')) {
@@ -345,27 +361,32 @@
     }
   }
 
-  // ── Tabs ────────────────────────────────────────
+  // ── Tabs (crossfade) ────────────────────────────
   function switchTab(tab) {
     const ios = tab === 'ios'
     document.getElementById('tab-ios').classList.toggle('active', ios)
     document.getElementById('tab-android').classList.toggle('active', !ios)
-    document.getElementById('steps-ios').classList.toggle('hidden', !ios)
-    document.getElementById('steps-android').classList.toggle('hidden', ios)
+    document.getElementById('steps-ios').classList.toggle('steps-active', ios)
+    document.getElementById('steps-android').classList.toggle('steps-active', !ios)
   }
 
   // ── Copy ────────────────────────────────────────
-  const CLIP_ICON = `<svg class="icon-clip" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+  // Paperclip icon from Figma (Landing – Copied frame)
+  const CLIP_ICON = `<svg class="icon-clip" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11.3024 11.1375L9.03823 13.4017C7.78239 14.6575 7.78239 16.6833 9.03823 17.9392C10.2941 19.195 12.3199 19.195 13.5757 17.9392L17.1416 14.3733C19.6441 11.8708 19.6441 7.80083 17.1416 5.29833C14.6391 2.79583 10.5691 2.79583 8.06656 5.29833L4.17989 9.185C2.03489 11.33 2.03489 14.8133 4.17989 16.9675" stroke="#5E5E5E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`
 
   function copyKey(btn) {
     const key = decodeURIComponent(window.location.hash.slice(1))
     navigator.clipboard.writeText(key).then(() => {
+      // Disable transition for instant snap to copied state (no white flash)
+      btn.style.transition = 'none'
       btn.classList.add('copied')
       btn.innerHTML = 'Скопировано ' + CLIP_ICON
+
       setTimeout(() => {
+        // Re-enable transition for smooth revert to white
+        btn.style.transition = ''
         btn.classList.remove('copied')
         btn.textContent = 'Скопировать'
       }, 2000)
