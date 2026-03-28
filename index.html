@@ -110,6 +110,8 @@
       background: #fff;
       box-shadow: 0px 2px 8px rgba(0,0,0,0.12);
       pointer-events: none;
+      /* own GPU layer — prevents icon jitter during transform */
+      will-change: transform;
       transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -145,6 +147,8 @@
       height: 18px;
       flex-shrink: 0;
       fill: #5e5e5e;
+      /* own compositing layer — stays stable while pill slides */
+      transform: translateZ(0);
       transition: fill 0.25s ease;
     }
 
@@ -223,15 +227,36 @@
       font-family: 'Space Mono', monospace;
       cursor: pointer;
       line-height: normal;
-      /* only transition going back to white (revert) */
-      transition: background 0.25s ease, color 0.25s ease;
+      /* smooth spring revert back to white */
+      transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* copied: applied instantly via js, no transition in */
+    /* Micro bounce on tap — Apple-style press feedback */
+    @keyframes btn-bounce {
+      0%   { transform: scale(1); }
+      35%  { transform: scale(0.95); }
+      70%  { transform: scale(1.01); }
+      100% { transform: scale(1); }
+    }
+
+    /* Content slides up & fades in */
+    @keyframes label-appear {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     .btn-copy.copied {
-      background: #7e7e7e;
-      color: #5e5e5e;
       cursor: default;
+      animation: btn-bounce 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    .btn-copy .btn-label {
+      display: contents; /* transparent wrapper, no layout impact */
+    }
+
+    .btn-copy.copied .btn-label {
+      animation: label-appear 0.22s 0.08s ease-out both;
     }
 
     .btn-copy .icon-clip {
@@ -293,7 +318,7 @@
         <div id="steps-ios" class="steps steps-active">
           <div class="step">
             <div class="badge">1</div>
-            <p class="step-text">Скачайте <a href="https://apps.apple.com/app/happ-proxy-utility/id6504287215" target="_blank">Happ</a> из App Store</p>
+            <p class="step-text">Скачайте <a href="https://apps.apple.com/app/id6746188973" target="_blank">Happ</a> из App Store</p>
           </div>
           <div class="step">
             <div class="badge">2</div>
@@ -301,7 +326,7 @@
           </div>
           <div class="step">
             <div class="badge">3</div>
-            <p class="step-text">Откройте <a href="https://apps.apple.com/app/happ-proxy-utility/id6504287215" target="_blank">Happ</a>, нажмите на «Добавить из буфера»</p>
+            <p class="step-text">Откройте <a href="https://apps.apple.com/app/id6746188973" target="_blank">Happ</a>, нажмите на «Добавить из буфера»</p>
           </div>
         </div>
 
@@ -399,17 +424,20 @@
   function copyKey(btn) {
     const key = decodeURIComponent(window.location.hash.slice(1))
     navigator.clipboard.writeText(key).then(() => {
-      // Disable transition for instant snap to copied state (no white flash)
-      btn.style.transition = 'none'
+      // Snap color instantly via inline (bypasses CSS transition → no white flash)
+      // then animation takes over for bounce + revert
+      btn.style.background = '#7e7e7e'
+      btn.style.color = '#5e5e5e'
       btn.classList.add('copied')
-      btn.innerHTML = 'Скопировано ' + CLIP_ICON
+      btn.innerHTML = '<span class="btn-label">Скопировано ' + CLIP_ICON + '</span>'
 
       setTimeout(() => {
-        // Re-enable transition for smooth revert to white
-        btn.style.transition = ''
+        // Clear inline styles → CSS transition kicks in → smooth spring to white
+        btn.style.background = ''
+        btn.style.color = ''
         btn.classList.remove('copied')
         btn.textContent = 'Скопировать'
-      }, 2000)
+      }, 3500)
     })
   }
 </script>
