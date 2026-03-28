@@ -233,13 +233,6 @@
     }
 
     /* Micro bounce on tap — Apple-style press feedback */
-    @keyframes btn-bounce {
-      0%   { transform: scale(1); }
-      35%  { transform: scale(0.95); }
-      70%  { transform: scale(1.01); }
-      100% { transform: scale(1); }
-    }
-
     /* Content slides up & fades in */
     @keyframes label-appear {
       from { opacity: 0; transform: translateY(4px); }
@@ -248,7 +241,6 @@
 
     .btn-copy.copied {
       cursor: default;
-      animation: btn-bounce 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
     }
 
     .btn-copy .btn-label {
@@ -425,7 +417,6 @@
     const key = decodeURIComponent(window.location.hash.slice(1))
     navigator.clipboard.writeText(key).then(() => {
       // Snap color instantly via inline (bypasses CSS transition → no white flash)
-      // then animation takes over for bounce + revert
       btn.style.background = '#7e7e7e'
       btn.style.color = '#5e5e5e'
       btn.classList.add('copied')
