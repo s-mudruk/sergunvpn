@@ -271,12 +271,20 @@
 
     /* Error */
     .error {
-      text-align: center;
-      padding: 40px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
     }
-    .error-icon { font-size: 36px; margin-bottom: 12px; }
-    .error h2   { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .error p    { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.5; }
+    .error-ascii {
+      font-size: 16px;
+      line-height: 1.4;
+      color: #fff;
+      white-space: pre;
+      text-align: left;
+    }
+    .error-ascii .error-label { color: #ff3b30; }
 
     .hidden { display: none !important; }
   </style>
@@ -356,8 +364,10 @@
 
     <!-- No key error -->
     <div id="error-content" class="hidden error">
-      <div class="error-icon">🔑</div>
-      <h2>Ключ не найден</h2>
+      <div class="error-ascii">     .--.
+    /.-. '----------.
+    \'-' .--"" ""--'
+<span class="error-label">error</span> '--'</div>
       <p>Используйте ссылку,<br>которую прислал Сергей</p>
     </div>
 
