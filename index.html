@@ -496,24 +496,44 @@
     const name   = input.value.trim().toLowerCase()
     if (!name) return
 
-    btn.disabled    = true
-    btn.textContent = '...'
+    btn.disabled       = true
+    btn.textContent    = '...'
     status.textContent = ''
     status.className   = 'lookup-status'
 
+    // After 2s show waiting hint (approval can take up to 30s)
+    const waitTimer = setTimeout(() => {
+      status.textContent = '# Ожидание подтверждения...'
+      status.className   = 'lookup-status'
+    }, 2000)
+
     try {
-      const res  = await fetch(`https://api.sergun.space/get-key?name=${encodeURIComponent(name)}`)
+      const controller = new AbortController()
+      const killTimer  = setTimeout(() => controller.abort(), 35000)
+
+      const res  = await fetch(`https://api.sergun.space/get-key?name=${encodeURIComponent(name)}`, {
+        signal: controller.signal
+      })
+      clearTimeout(killTimer)
+      clearTimeout(waitTimer)
       const data = await res.json()
 
       if (data.link) {
         window._vpnKey = data.link
         document.getElementById('lookup-content').classList.add('hidden')
         document.getElementById('main-content').classList.remove('hidden')
+        return
+      }
+      if (data.error === 'denied') {
+        status.textContent = '[!] запрос отклонён'
+      } else if (data.error === 'timeout') {
+        status.textContent = '[!] нет ответа — попробуйте позже'
       } else {
         status.textContent = `[!] not found: ${name}`
-        status.className   = 'lookup-status err'
       }
+      status.className = 'lookup-status err'
     } catch {
+      clearTimeout(waitTimer)
       status.textContent = '[!] error: unavailable'
       status.className   = 'lookup-status err'
     }
