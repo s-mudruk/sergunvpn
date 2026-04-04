@@ -296,7 +296,7 @@
       text-align: center;
       min-height: 20px;
     }
-    .lookup-status.err { color: #ff3b30; }
+    .lookup-status.err { color: #ff3b30; opacity: 0.45; }
 
     /* Error */
     .error {
@@ -338,7 +338,7 @@
     <!-- Valid key -->
     <div id="main-content" class="hidden">
       <div class="logo"><span class="name">Sergun/</span><span class="dim">VPN</span></div>
-      <h1>Hello, world?</h1>
+      <h1>Hello, key!</h1>
       <p class="subtitle"># Выберите ОС и следуйте инструкции</p>
 
       <div class="tabs">
@@ -398,8 +398,7 @@
     <div id="lookup-content" class="hidden">
       <div class="logo"><span class="name">Sergun/</span><span class="dim">VPN</span></div>
       <h1>Hello, world?</h1>
-      <p class="subtitle"># Введите ваше имя для получения ключа</p>
-      <div class="steps-wrapper" style="min-height:0; margin-bottom:24px;"></div>
+      <p class="subtitle"># Введите имя для получения ключа</p>
       <input
         type="text"
         id="name-input"
@@ -496,26 +495,17 @@
     const name   = input.value.trim().toLowerCase()
     if (!name) return
 
-    btn.disabled       = true
-    btn.textContent    = '...'
-    status.textContent = ''
-    status.className   = 'lookup-status'
-
-    // After 2s show waiting hint (approval can take up to 30s)
-    const waitTimer = setTimeout(() => {
-      status.textContent = '# Ожидание подтверждения...'
-      status.className   = 'lookup-status'
-    }, 2000)
+    btn.disabled         = true
+    input.disabled       = true
+    btn.style.background = '#7e7e7e'
+    btn.style.color      = '#5e5e5e'
+    btn.style.fontSize   = '24px'
+    btn.textContent      = '···'
+    status.textContent   = ''
+    status.className     = 'lookup-status'
 
     try {
-      const controller = new AbortController()
-      const killTimer  = setTimeout(() => controller.abort(), 35000)
-
-      const res  = await fetch(`https://api.sergun.space/get-key?name=${encodeURIComponent(name)}`, {
-        signal: controller.signal
-      })
-      clearTimeout(killTimer)
-      clearTimeout(waitTimer)
+      const res  = await fetch(`https://api.sergun.space/get-key?name=${encodeURIComponent(name)}`)
       const data = await res.json()
 
       if (data.link) {
@@ -524,22 +514,19 @@
         document.getElementById('main-content').classList.remove('hidden')
         return
       }
-      if (data.error === 'denied') {
-        status.textContent = '[!] запрос отклонён'
-      } else if (data.error === 'timeout') {
-        status.textContent = '[!] нет ответа — попробуйте позже'
-      } else {
-        status.textContent = `[!] not found: ${name}`
-      }
-      status.className = 'lookup-status err'
+      status.textContent = `[!] not found: ${name}`
+      status.className   = 'lookup-status err'
     } catch {
-      clearTimeout(waitTimer)
       status.textContent = '[!] error: unavailable'
       status.className   = 'lookup-status err'
     }
 
-    btn.disabled    = false
-    btn.textContent = 'Получить ключ'
+    btn.disabled         = false
+    input.disabled       = false
+    btn.style.background = ''
+    btn.style.color      = ''
+    btn.style.fontSize   = ''
+    btn.textContent      = 'Получить ключ'
   }
 
   function copyKey(btn) {
