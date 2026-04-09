@@ -514,7 +514,11 @@
         document.getElementById('main-content').classList.remove('hidden')
         return
       }
-      status.textContent = `[!] not found: ${name}`
+      if (res.status === 429) {
+        status.textContent = '[!] try again in a few minutes'
+      } else {
+        status.textContent = `[!] not found: ${name}`
+      }
       status.className   = 'lookup-status err'
     } catch {
       status.textContent = '[!] error: unavailable'
